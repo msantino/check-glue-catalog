@@ -9,7 +9,7 @@ ext_modules = []
 
 setup(
     name='check_glue_catalog',  
-    version='0.1.4',
+    version='0.1.5',
     author="Marcelo Santino",
     author_email="eu@marcelosantino.com.br",
     description="Check for details in Glue Catalog and tell if its outdated",

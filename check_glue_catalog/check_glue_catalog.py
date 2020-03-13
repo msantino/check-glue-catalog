@@ -22,7 +22,7 @@ def get_tables(catalog_name, max_latency_days=1):
             result['outdated_list'].append({
                 "table_name": table.get('Name'),
                 "due_days": table_days_updated,
-                "rows": table.get('recordCount'),
+                "rows": int(table.get('recordCount')),
                 "last_updated": table.get('UpdateTime'),
             })
             logging.debug("Table {} has latency greather than alowed ({} x {})".format(table.get('Name'), table_days_updated, max_latency_days))

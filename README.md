@@ -28,19 +28,19 @@ print(result)
     {
       "table_name": "table_name_1",
       "due_days": 2,
-      "rows": "7",
+      "rows": 7,
       "last_updated": "2020-03-10 05:43:37"
     },
     {
       "table_name": "other_table",
       "due_days": 76,
-      "rows": "5",
+      "rows": 5,
       "last_updated": "2019-12-27 11:08:13"
     },
     {
       "table_name": "some_table",
       "due_days": 97,
-      "rows": "5",
+      "rows": 5,
       "last_updated": "2019-12-06 16:22:52"
     }
   ]
