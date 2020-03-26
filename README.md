@@ -24,6 +24,7 @@ print(result)
 {
   "outdated": 3,
   "updated": 23,
+  "total": 26,
   "outdated_list": [
     {
       "table_name": "table_name_1",

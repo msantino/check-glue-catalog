@@ -1,8 +1,6 @@
 import json
-from .utils import config_logger, get_glue_tables
-
-# Loading logger config from aux function
-logging = config_logger()
+import logging
+from .utils import get_glue_tables
 
 def get_tables(catalog_name, max_latency_days=1):
 
@@ -13,6 +11,7 @@ def get_tables(catalog_name, max_latency_days=1):
     result = {
         "outdated": 0,
         "updated": 0,
+        "total": len(tables_list),
         "outdated_list": []
     }
     for table in tables_list:

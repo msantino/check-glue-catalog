@@ -3,16 +3,6 @@ import sys
 import boto3
 from datetime import datetime
 
-def config_logger():
-    logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
-    sh = logging.StreamHandler()
-    sh.setFormatter(
-        logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    )
-    logger.addHandler(sh)
-    return logger
-
 def get_table_details(glue_table_spec):
     return {
         "Name": glue_table_spec.get('Name'),
@@ -22,30 +12,32 @@ def get_table_details(glue_table_spec):
         "recordCount": glue_table_spec.get('Parameters').get('recordCount'),
     }
 
-def get_glue_tables(DB_NAME, GLUE_MAX_TABLES_RESULT=100):
-    
+def glue_fetch(db_name, next_token=None, max_results=10):
     glue = boto3.client('glue')
-
-    glue_tables = glue.get_tables(
-        DatabaseName=DB_NAME,
-        MaxResults=GLUE_MAX_TABLES_RESULT
+    return glue.get_tables(
+        DatabaseName=db_name,
+        MaxResults=max_results,
+        NextToken=next_token
     )
+    
+def get_glue_tables(DB_NAME):
 
+    next_token = ""
     full_tables_list = list()
 
-    logging.info("Looping glue results")
-    for tb in glue_tables.get('TableList'):
-        full_tables_list.append(get_table_details(tb))
+    while next_token is not None:
 
-    next_token=glue_tables.get('NextToken')
-    logging.info("Fetching glue tables for NextToken: {}".format(next_token))
+        # Retrieve glue tables from catalog
+        glue_tables = glue_fetch(DB_NAME, next_token)
 
-    # glue_tables = glue.get_tables(
-    #     DatabaseName=DB_NAME,
-    #     MaxResults=GLUE_MAX_TABLES_RESULT,
-    #     NextToken=next_token
-    # )
+        logging.debug("Looping glue results")
+        for tb in glue_tables.get('TableList'):
+            full_tables_list.append(get_table_details(tb))
 
-    logging.info("Glue database tables count: {}".format(len(full_tables_list)))
+        next_token=glue_tables.get('NextToken')
+        logging.debug("Fetching glue tables for NextToken: {}".format(next_token))
+
+
+    logging.debug("Glue database tables count: {}".format(len(full_tables_list)))
 
     return full_tables_list
